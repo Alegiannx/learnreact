@@ -12,21 +12,20 @@ import './DataTable.css';
 export default function DataTable(props) {
 
     const [data, setData] = useState([]);
-    const [dirty, setDirty] = useState(false); //marks need to update
-
-    async function updateData() {
-        await fetch("/api/" + props.view + "s") // eg /api/employees
-            .then((res) => res.json())
-            .then((res) => {
-                setData(res);
-                setDirty(false);
-            },
-                (err) => console.log(err));
-    }
 
     useEffect(() => {
+        async function updateData() {
+            await fetch("/api/" + props.view + "s") // eg /api/employees
+                .then((res) => res.json())
+                .then((res) => {
+                    setData(res);
+                },
+                    (err) => console.log(err));
+        }
+
         updateData();
-    }, [dirty]);
+        console.log("happened");
+    }, [props.view]);
 
     let type = guessType(); //either employee or department
     let keys = getTrimmedKeys(type);
